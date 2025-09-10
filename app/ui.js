@@ -1802,3 +1802,146 @@ const UI = {
 };
 
 export default UI;
+// ===== THÊM CODE VÀO CUỐI FILE =====
+
+// Biến toàn cục
+let mouseMode = 'normal';
+
+// Hàm xử lý chế độ chuột
+function handleMouseModeChange() {
+    const select = document.getElementById('noVNC_mouse_mode');
+    if (select) {
+        mouseMode = select.value;
+        applyMouseSettings();
+        
+        // Lưu cài đặt
+        localStorage.setItem('noVNC_mouse_mode', mouseMode);
+    }
+}
+
+// Áp dụng cài đặt chuột
+function applyMouseSettings() {
+    if (!UI.rfb) return;
+    
+    if (mouseMode === 'touch') {
+        // Chế độ cảm ứng
+        UI.rfb.clipViewport = true;
+        UI.rfb.dragViewport = true;
+        UI.rfb.scaleViewport = true;
+        UI.rfb.preventDefault = true;
+    } else {
+        // Chế độ chuột thường
+        UI.rfb.clipViewport = false;
+        UI.rfb.dragViewport = false;
+        UI.rfb.scaleViewport = false;
+        UI.rfb.preventDefault = false;
+    }
+}
+
+// Hàm gửi phím
+function sendKey(key) {
+    if (!UI.rfb) return;
+    
+    const keyMap = {
+        'Esc': 0xFF1B,
+        'F1': 0xFFBE,
+        'F2': 0xFFBF,
+        'F3': 0xFFC0,
+        'F4': 0xFFC1,
+        'F5': 0xFFC2,
+        'F6': 0xFFC3,
+        'F7': 0xFFC4,
+        'F8': 0xFFC5,
+        'F9': 0xFFC6,
+        'F10': 0xFFC7,
+        'F11': 0xFFC8,
+        'F12': 0xFFC9,
+        'Enter': 0xFF0D,
+        'Tab': 0xFF09,
+        'Space': 0x0020,
+        'Backspace': 0xFF08,
+        'Delete': 0xFFFF,
+        'Insert': 0xFF63,
+        'Home': 0xFF50,
+        'End': 0xFF57,
+        'PageUp': 0xFF55,
+        'PageDown': 0xFF56,
+        'ArrowUp': 0xFF52,
+        'ArrowDown': 0xFF54,
+        'ArrowLeft': 0xFF51,
+        'ArrowRight': 0xFF53
+    };
+    
+    if (keyMap[key]) {
+        UI.rfb.sendKey(keyMap[key]);
+    } else if (key.length === 1) {
+        // Gửi ký tự thông thường
+        UI.rfb.sendKey(key.charCodeAt(0));
+    }
+}
+
+// Khởi tạo controls tùy chỉnh
+function initCustomControls() {
+    console.log("Đang khởi tạo controls tùy chỉnh...");
+    
+    // Chế độ chuột
+    const mouseModeSelect = document.getElementById('noVNC_mouse_mode');
+    if (mouseModeSelect) {
+        mouseModeSelect.addEventListener('change', handleMouseModeChange);
+        
+        // Load cài đặt đã lưu
+        const savedMode = localStorage.getItem('noVNC_mouse_mode');
+        if (savedMode) {
+            mouseModeSelect.value = savedMode;
+            mouseMode = savedMode;
+        }
+    }
+    
+    // Nút bàn phím ảo
+    const toggleKeyboardBtn = document.getElementById('noVNC_toggle_keyboard');
+    const virtualKeyboard = document.getElementById('noVNC_virtual_keyboard');
+    const closeKeyboardBtn = document.getElementById('noVNC_close_keyboard');
+    
+    if (toggleKeyboardBtn && virtualKeyboard) {
+        toggleKeyboardBtn.addEventListener('click', function() {
+            virtualKeyboard.style.display = 
+                virtualKeyboard.style.display === 'none' ? 'block' : 'none';
+        });
+    }
+    
+    if (closeKeyboardBtn && virtualKeyboard) {
+        closeKeyboardBtn.addEventListener('click', function() {
+            virtualKeyboard.style.display = 'none';
+        });
+    }
+    
+    // Sự kiện click phím ảo
+    document.querySelectorAll('.key').forEach(key => {
+        key.addEventListener('click', function() {
+            const keyValue = this.getAttribute('data-key');
+            if (keyValue) {
+                sendKey(keyValue);
+                // Hiệu ứng nhấn phím
+                this.style.transform = 'translateY(4px)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(0)';
+                }, 100);
+            }
+        });
+    });
+}
+
+// Gọi khi kết nối thành công
+const originalConnected = UI.connected;
+UI.connected = function() {
+    originalConnected.apply(this, arguments);
+    applyMouseSettings();
+    console.log("Đã kết nối - Áp dụng chế độ chuột: " + mouseMode);
+};
+
+// Khởi tạo khi trang load
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(initCustomControls, 1000); // Chờ 1s để trang load hoàn tất
+});
+
+// ===== KẾT THÚC PHẦN THÊM =====
