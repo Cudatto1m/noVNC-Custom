@@ -66,6 +66,20 @@
             background: white;
             margin-left: 5px;
         }
+
+        /* Container bàn phím ảo */
+        #noVNC_virtual_keyboard {
+            background: #333;
+            padding: 15px;
+            border-radius: 10px;
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            max-width: 90%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
     </style>
     <!--
     noVNC example: simple example using default UI
@@ -178,6 +192,7 @@
     <div id="noVNC_control_bar_anchor" class="noVNC_vcenter">
 
         <div id="noVNC_control_bar">
+            
             <div id="noVNC_control_bar_handle" title="Hide/Show the control bar"><div></div></div>
 
             <div class="noVNC_scroll">
@@ -196,6 +211,20 @@
                 <input type="image" alt="Keyboard" src="app/images/keyboard.svg"
                     id="noVNC_keyboard_button" class="noVNC_button" title="Show keyboard">
             </div>
+
+            <!-- ===== THÊM CODE CỦA BẠN VÀO ĐÂY ===== -->
+            <div class="noVNC_setting">
+                <label for="noVNC_mouse_mode">Chế độ chuột:</label>
+                <select id="noVNC_mouse_mode">
+                    <option value="touch">Cảm ứng</option>
+                    <option value="normal" selected>Chuột thường</option>
+                </select>
+            </div>
+
+            <button id="noVNC_toggle_keyboard" class="noVNC_button">
+                <span>📱 Bàn phím ảo</span>
+            </button>
+            <!-- ===== KẾT THÚC PHẦN THÊM ===== -->
 
             <!-- Extra manual keys -->
             <input type="image" alt="Extra keys" src="app/images/toggleextrakeys.svg"
@@ -473,9 +502,271 @@
             autocomplete="off" spellcheck="false" tabindex="-1"></textarea>
     </div>
 
+    <!-- ===== BÀN PHÍM ẢO ===== -->
+    <div id="noVNC_virtual_keyboard" style="display:none;">
+        
+        <!-- Hàng Function Keys -->
+        <div class="keyboard-row">
+            <div class="key" data-key="Esc">Esc</div>
+            <div class="key" data-key="F1">F1</div>
+            <div class="key" data-key="F2">F2</div>
+            <div class="key" data-key="F3">F3</div>
+            <div class="key" data-key="F4">F4</div>
+            <div class="key" data-key="F5">F5</div>
+            <div class="key" data-key="F6">F6</div>
+            <div class="key" data-key="F7">F7</div>
+            <div class="key" data-key="F8">F8</div>
+            <div class="key" data-key="F9">F9</div>
+            <div class="key" data-key="F10">F10</div>
+            <div class="key" data-key="F11">F11</div>
+            <div class="key" data-key="F12">F12</div>
+        </div>
+
+        <!-- Hàng số -->
+        <div class="keyboard-row">
+            <div class="key" data-key="`">` ~</div>
+            <div class="key" data-key="1">1 !</div>
+            <div class="key" data-key="2">2 @</div>
+            <div class="key" data-key="3">3 #</div>
+            <div class="key" data-key="4">4 $</div>
+            <div class="key" data-key="5">5 %</div>
+            <div class="key" data-key="6">6 ^</div>
+            <div class="key" data-key="7">7 &</div>
+            <div class="key" data-key="8">8 *</div>
+            <div class="key" data-key="9">9 (</div>
+            <div class="key" data-key="0">0 )</div>
+            <div class="key" data-key="-">- _</div>
+            <div class="key" data-key="=">= +</div>
+            <div class="key" data-key="Backspace" style="width:80px;">Backspace</div>
+        </div>
+
+        <!-- Hàng QWERTY -->
+        <div class="keyboard-row">
+            <div class="key" data-key="Tab" style="width:70px;">Tab</div>
+            <div class="key" data-key="q">Q</div>
+            <div class="key" data-key="w">W</div>
+            <div class="key" data-key="e">E</div>
+            <div class="key" data-key="r">R</div>
+            <div class="key" data-key="t">T</div>
+            <div class="key" data-key="y">Y</div>
+            <div class="key" data-key="u">U</div>
+            <div class="key" data-key="i">I</div>
+            <div class="key" data-key="o">O</div>
+            <div class="key" data-key="p">P</div>
+            <div class="key" data-key="[">[ {</div>
+            <div class="key" data-key="]">] }</div>
+            <div class="key" data-key="\\">\\ |</div>
+        </div>
+
+        <!-- Hàng ASDF -->
+        <div class="keyboard-row">
+            <div class="key" data-key="CapsLock" style="width:80px;">Caps</div>
+            <div class="key" data-key="a">A</div>
+            <div class="key" data-key="s">S</div>
+            <div class="key" data-key="d">D</div>
+            <div class="key" data-key="f">F</div>
+            <div class="key" data-key="g">G</div>
+            <div class="key" data-key="h">H</div>
+            <div class="key" data-key="j">J</div>
+            <div class="key" data-key="k">K</div>
+            <div class="key" data-key="l">L</div>
+            <div class="key" data-key=";">; :</div>
+            <div class="key" data-key="'">' "</div>
+            <div class="key" data-key="Enter" style="width:80px;">Enter</div>
+        </div>
+
+        <!-- Hàng ZXCV -->
+        <div class="keyboard-row">
+            <div class="key" data-key="Shift" style="width:90px;">Shift</div>
+            <div class="key" data-key="z">Z</div>
+            <div class="key" data-key="x">X</div>
+            <div class="key" data-key="c">C</div>
+            <div class="key" data-key="v">V</div>
+            <div class="key" data-key="b">B</div>
+            <div class="key" data-key="n">N</div>
+            <div class="key" data-key="m">M</div>
+            <div class="key" data-key=",">, <</div>
+            <div class="key" data-key=".">. ></div>
+            <div class="key" data-key="/">/ ?</div>
+            <div class="key" data-key="Shift" style="width:90px;">Shift</div>
+        </div>
+
+        <!-- Hàng Space -->
+        <div class="keyboard-row">
+            <div class="key" data-key="Ctrl" style="width:70px;">Ctrl</div>
+            <div class="key" data-key="Alt" style="width:70px;">Alt</div>
+            <div class="key" data-key=" " style="width:200px;">Space</div>
+            <div class="key" data-key="Alt" style="width:70px;">Alt</div>
+            <div class="key" data-key="Ctrl" style="width:70px;">Ctrl</div>
+        </div>
+
+        <!-- Nút đóng -->
+        <div class="keyboard-row">
+            <button id="noVNC_close_keyboard" style="margin-top:10px; padding:8px 15px; background:#ff4444; color:white; border:none; border-radius:5px; cursor:pointer;">
+                Đóng bàn phím
+            </button>
+        </div>
+    </div>
+
     <audio id="noVNC_bell">
         <source src="app/sounds/bell.oga" type="audio/ogg">
         <source src="app/sounds/bell.mp3" type="audio/mpeg">
     </audio>
- </body>
+
+    <script>
+        // ===== THÊM JAVASCRIPT VÀO ĐÂY =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chờ 1 giây để đảm bảo noVNC đã load xong
+            setTimeout(function() {
+                // Biến toàn cục
+                let mouseMode = 'normal';
+
+                // Hàm xử lý chế độ chuột
+                function handleMouseModeChange() {
+                    const select = document.getElementById('noVNC_mouse_mode');
+                    if (select) {
+                        mouseMode = select.value;
+                        applyMouseSettings();
+                        
+                        // Lưu cài đặt
+                        localStorage.setItem('noVNC_mouse_mode', mouseMode);
+                    }
+                }
+
+                // Áp dụng cài đặt chuột
+                function applyMouseSettings() {
+                    if (typeof UI === 'undefined' || !UI.rfb) {
+                        console.log("Chưa kết nối VNC");
+                        return;
+                    }
+                    
+                    if (mouseMode === 'touch') {
+                        // Chế độ cảm ứng
+                        UI.rfb.clipViewport = true;
+                        UI.rfb.dragViewport = true;
+                        UI.rfb.scaleViewport = true;
+                        UI.rfb.preventDefault = true;
+                        console.log("Đã chuyển sang chế độ cảm ứng");
+                    } else {
+                        // Chế độ chuột thường
+                        UI.rfb.clipViewport = false;
+                        UI.rfb.dragViewport = false;
+                        UI.rfb.scaleViewport = false;
+                        UI.rfb.preventDefault = false;
+                        console.log("Đã chuyển sang chế độ chuột thường");
+                    }
+                }
+
+                // Hàm gửi phím
+                function sendKey(key) {
+                    if (typeof UI === 'undefined' || !UI.rfb) {
+                        console.log("Chưa kết nối VNC, không thể gửi phím");
+                        return;
+                    }
+                    
+                    const keyMap = {
+                        'Esc': 0xFF1B,
+                        'F1': 0xFFBE,
+                        'F2': 0xFFBF,
+                        'F3': 0xFFC0,
+                        'F4': 0xFFC1,
+                        'F5': 0xFFC2,
+                        'F6': 0xFFC3,
+                        'F7': 0xFFC4,
+                        'F8': 0xFFC5,
+                        'F9': 0xFFC6,
+                        'F10': 0xFFC7,
+                        'F11': 0xFFC8,
+                        'F12': 0xFFC9,
+                        'Enter': 0xFF0D,
+                        'Tab': 0xFF09,
+                        'Space': 0x0020,
+                        'Backspace': 0xFF08,
+                        'Delete': 0xFFFF,
+                        'Insert': 0xFF63,
+                        'Home': 0xFF50,
+                        'End': 0xFF57,
+                        'PageUp': 0xFF55,
+                        'PageDown': 0xFF56,
+                        'ArrowUp': 0xFF52,
+                        'ArrowDown': 0xFF54,
+                        'ArrowLeft': 0xFF51,
+                        'ArrowRight': 0xFF53,
+                        'Shift': 0xFFE1,
+                        'Ctrl': 0xFFE3,
+                        'Alt': 0xFFE9,
+                        'CapsLock': 0xFFE5
+                    };
+                    
+                    if (keyMap[key]) {
+                        UI.rfb.sendKey(keyMap[key]);
+                        console.log("Đã gửi phím: " + key);
+                    } else if (key.length === 1) {
+                        // Gửi ký tự thông thường
+                        UI.rfb.sendKey(key.charCodeAt(0));
+                        console.log("Đã gửi ký tự: " + key);
+                    }
+                }
+
+                // Khởi tạo controls tùy chỉnh
+                function initCustomControls() {
+                    console.log("Đang khởi tạo controls tùy chỉnh...");
+                    
+                    // Chế độ chuột
+                    const mouseModeSelect = document.getElementById('noVNC_mouse_mode');
+                    if (mouseModeSelect) {
+                        mouseModeSelect.addEventListener('change', handleMouseModeChange);
+                        
+                        // Load cài đặt đã lưu
+                        const savedMode = localStorage.getItem('noVNC_mouse_mode');
+                        if (savedMode) {
+                            mouseModeSelect.value = savedMode;
+                            mouseMode = savedMode;
+                        }
+                    }
+                    
+                    // Nút bàn phím ảo
+                    const toggleKeyboardBtn = document.getElementById('noVNC_toggle_keyboard');
+                    const virtualKeyboard = document.getElementById('noVNC_virtual_keyboard');
+                    const closeKeyboardBtn = document.getElementById('noVNC_close_keyboard');
+                    
+                    if (toggleKeyboardBtn && virtualKeyboard) {
+                        toggleKeyboardBtn.addEventListener('click', function() {
+                            virtualKeyboard.style.display = 
+                                virtualKeyboard.style.display === 'none' ? 'block' : 'none';
+                        });
+                    }
+                    
+                    if (closeKeyboardBtn && virtualKeyboard) {
+                        closeKeyboardBtn.addEventListener('click', function() {
+                            virtualKeyboard.style.display = 'none';
+                        });
+                    }
+                    
+                    // Sự kiện click phím ảo
+                    document.querySelectorAll('.key').forEach(key => {
+                        key.addEventListener('click', function() {
+                            const keyValue = this.getAttribute('data-key');
+                            if (keyValue) {
+                                sendKey(keyValue);
+                                // Hiệu ứng nhấn phím
+                                this.style.transform = 'translateY(4px)';
+                                setTimeout(() => {
+                                    this.style.transform = 'translateY(0)';
+                                }, 100);
+                            }
+                        });
+                    });
+
+                    console.log("Đã khởi tạo controls tùy chỉnh thành công!");
+                }
+
+                // Gọi hàm khởi tạo
+                initCustomControls();
+
+            }, 1000);
+        });
+        // ===== KẾT THÚC JAVASCRIPT =====
+    </script>
+</body>
 </html>
