@@ -1,7 +1,72 @@
 <!DOCTYPE html>
 <html lang="en" class="noVNC_loading">
 <head>
+    <!-- ... các style có sẵn ... -->
+    
+    <!-- THÊM CSS MỚI VÀO ĐÂY -->
+    <style>
+        /* Bàn phím ảo */
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
 
+        .key {
+            background: #ffffff;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            padding: 10px 14px;
+            margin: 3px;
+            cursor: pointer;
+            user-select: none;
+            min-width: 35px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.1s ease;
+        }
+
+        .key:hover {
+            background: #e6f7ff;
+            border-color: #1890ff;
+        }
+
+        .key:active {
+            background: #bae7ff;
+            transform: translateY(2px);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* Nút bàn phím ảo */
+        #noVNC_toggle_keyboard {
+            background: linear-gradient(45deg, #1890ff, #096dd9);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
+        }
+
+        #noVNC_toggle_keyboard:hover {
+            background: linear-gradient(45deg, #40a9ff, #1890ff);
+            transform: translateY(-1px);
+        }
+
+        /* Dropdown chế độ chuột */
+        #noVNC_mouse_mode {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #d9d9d9;
+            background: white;
+            margin-left: 5px;
+        }
+    </style>
     <!--
     noVNC example: simple example using default UI
     Copyright (C) 2019 The noVNC authors
