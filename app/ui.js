@@ -556,10 +556,13 @@ const UI = {
     },
 
     closeControlbar() {
-        UI.closeAllPanels();
-        document.getElementById('noVNC_control_bar')
-            .classList.remove("noVNC_open");
+    UI.closeAllPanels();
+    document.getElementById('noVNC_control_bar')
+        .classList.remove("noVNC_open");
+    // CHỈ FOCUS NẾU RFB TỒN TẠI VÀ CÓ HÀM FOCUS
+    if (UI.rfb && typeof UI.rfb.focus === 'function') {
         UI.rfb.focus();
+        }
     },
 
     toggleControlbar() {
